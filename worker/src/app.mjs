@@ -1,6 +1,5 @@
 import express from "express";
 import rootRouter from "./routes/root.routes.mjs";
-import { client } from "./utils/redis.mjs";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import LogsParser from "./utils/blender.mjs";
@@ -17,8 +16,6 @@ amqpChannel.prefetch(1);
 const app = express();
 app.use(rootRouter);
 
-await client.connect();
-console.log("redis client is connected");
 
 amqpChannel.assertQueue("jobs");
 amqpChannel.consume("jobs", async (msg) => {
